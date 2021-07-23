@@ -2,23 +2,30 @@
  *
  * @author Omar Safwat
  */
-package com.mycompany.mavenproject2;
+package group.webapp;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
 import org.knowm.xchart.*;
+import org.knowm.xchart.VectorGraphicsEncoder.VectorGraphicsFormat;
 import org.knowm.xchart.style.*;
 import smile.data.DataFrame;
 
 public class MostPopularArea {
 
-    public static void main(String[] args) {
+    public static String getHtmlPage() throws IOException, URISyntaxException {
         JobsCSVDAO dao = new JobsCSVDAO();
-        String filePath = "src/main/resources/data/Wuzzuf_Jobs.csv";
-        dao.readCSV(filePath);
+        String filePath = "/Wuzzuf_Jobs.csv";
+        
+        //Path path = new File(MostPopularArea.class.getClass().getResource(filePath).getFile()).toPath();
+        dao.readCSV("C:/Users/omark/Desktop/Java_WebApp/webapp/target/webapp/WEB-INF/classes/Wuzzuf_Jobs.csv");//MostPopularArea.class.getResource(filePath).toString());
         DataFrame jobs = dao.getAllJobs();
 
         // Clean data
@@ -34,13 +41,25 @@ public class MostPopularArea {
                 .stream()
                 .sorted(Map.Entry.<String, Long>comparingByValue(Comparator.reverseOrder()))
                 .collect(Collectors.toList());
-        System.out.println("Most popular area is: " + locFreqList.get(0).getKey() + ", With a total number of occurance: " + locFreqList.get(0).getValue());
 
         // Plotting the histogram of each location
-        graphLocationsFreq(locFreqMap);
+        String plotPath = graphLocationsFreq(locFreqMap);
+        
+        // Store html file as string to edit it
+        String htmlPath = "/mostPopularArea.html";
+        File htmlFile = new File(ExploreData.class.getResource(htmlPath).toURI());
+        String htmlString = FileUtils.readFileToString(htmlFile);
+        
+        String textTag = "<p>Most popular area is: " + locFreqList.get(0).getKey() + ", With a total number of occurance: " + locFreqList.get(0).getValue() + "</p>";
+        String locationHistTag = "<img src=\"" + plotPath + "\">";
+        
+        htmlString = htmlString.replace("$textTag", textTag);
+        htmlString = htmlString.replace("$locationHistTag", locationHistTag);
+        //Return as a string
+        return htmlString;
     }
     
-    public static void graphLocationsFreq(Map<String, Long> frequencyMap) {
+    public static String graphLocationsFreq(Map<String, Long> frequencyMap) throws IOException {
         
         // Filter Locations with more than a 150 occurence
         frequencyMap = frequencyMap.entrySet().stream().filter(e -> e.getValue() > 70).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
@@ -56,8 +75,12 @@ public class MostPopularArea {
         chart.getStyler ().setStacked (true);
         
         chart.addSeries ("Location counts", locations, freq);
-        // Show it
-        new SwingWrapper (chart).displayChart ();
+        // Save plot as SVG file and return its path
+        File plotFile = File.createTempFile("plot", ".svg");
+        VectorGraphicsEncoder.saveVectorGraphic(chart, plotFile.getAbsolutePath(), VectorGraphicsFormat.SVG);
+        String plotPath = plotFile.getAbsolutePath();
+        
+        return plotPath;
     }
 
 }

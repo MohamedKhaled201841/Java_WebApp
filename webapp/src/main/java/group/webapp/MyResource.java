@@ -4,6 +4,8 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * Root resource (exposed at "myresource" path)
@@ -21,5 +23,20 @@ public class MyResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
         return "Got it!";
+    }
+    
+    
+    @GET @Path("summary")
+    @Produces(MediaType.TEXT_HTML)
+    public String exploreData() throws IOException, URISyntaxException {
+        return ExploreData.exploreData();
+    }
+    
+    @GET @Path("mostPopularArea")
+    @Produces(MediaType.TEXT_HTML)
+    public String mostPopularArea () throws IOException, URISyntaxException {
+        // Return String
+        // Return BufferedImage
+        return MostPopularArea.getHtmlPage();
     }
 }
