@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.mavenproject2;
+package group.webapp;
 
-
-import com.mycompany.java_ml_webapp.JobsDAO;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
 import org.apache.commons.csv.CSVFormat;
 import smile.data.DataFrame;
 import smile.data.measure.NominalScale;
@@ -22,7 +21,7 @@ public class JobsCSVDAO implements JobsDAO<DataFrame> {
     
     private DataFrame jobs = null;
     
-    public void readCSV(String path){
+    public void readCSV(String path) {
         CSVFormat format = CSVFormat.DEFAULT.withFirstRecordAsHeader();
         try {
             this.jobs = Read.csv(path, format);

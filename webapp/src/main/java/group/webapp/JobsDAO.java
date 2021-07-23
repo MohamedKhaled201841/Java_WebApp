@@ -1,4 +1,4 @@
-package com.mycompany.java_ml_webapp;
+package group.webapp;
 
 import java.util.List;
 
