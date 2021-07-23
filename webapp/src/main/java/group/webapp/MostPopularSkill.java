@@ -2,10 +2,12 @@
  *
  * @author Mostafa Fathy
  */
-package com.mycompany.mavenproject2;
+package group.webapp;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -17,9 +19,9 @@ public class MostPopularSkill {
 
     public static void main(String[] args) throws IOException {
         JobsCSVDAO dao = new JobsCSVDAO();
-        //Read Data
-        String filePath = "src/main/resources/data/Wuzzuf_Jobs.csv";
-        dao.readCSV(filePath);
+        String filePath = "/Wuzzuf_Jobs.csv";
+        Path path = new File(MostPopularArea.class.getClass().getResource(filePath).getFile()).toPath();
+        dao.readCSV(filePath);//MostPopularArea.class.getResource(filePath).toString());
         DataFrame jobs = dao.getAllJobs();
 
         // Clean data
