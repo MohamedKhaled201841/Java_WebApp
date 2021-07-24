@@ -48,7 +48,7 @@ public class MostPopularArea {
         
         // Store html file as string to edit it
         String htmlPath = "/mostPopularArea.html";
-        File htmlFile = new File(ExploreData.class.getResource(htmlPath).toURI());
+        File htmlFile = new File(MostPopularArea.class.getResource(htmlPath).toURI());
         String htmlString = FileUtils.readFileToString(htmlFile);
         
         String textTag = "<p>Most popular area is: " + locFreqList.get(0).getKey() + ", With a total number of occurance: " + locFreqList.get(0).getValue() + "</p>";

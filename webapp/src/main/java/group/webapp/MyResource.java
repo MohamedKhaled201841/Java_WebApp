@@ -39,4 +39,12 @@ public class MyResource {
         // Return BufferedImage
         return MostPopularArea.getHtmlPage();
     }
+    
+    @GET @Path("mostPopularCompany")
+    @Produces(MediaType.TEXT_HTML)
+    public String mostPopularCompany () throws IOException, URISyntaxException {
+        // Return String
+        // Return BufferedImage
+        return MostPopularCompany.getHtmlPage();
+    }
 }
