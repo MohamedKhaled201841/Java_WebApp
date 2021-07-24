@@ -14,8 +14,8 @@ import java.net.URISyntaxException;
 public class MyResource {
 
     /**
-     * Method handling HTTP GET requests. The returned object will be sent
-     * to the client as "text/plain" media type.
+     * Method handling HTTP GET requests. The returned object will be sent to
+     * the client as "text/plain" media type.
      *
      * @return String that will be returned as a text/plain response.
      */
@@ -24,27 +24,48 @@ public class MyResource {
     public String getIt() {
         return "Got it!";
     }
-    
-    
-    @GET @Path("summary")
+
+    @GET
+    @Path("summary")
     @Produces(MediaType.TEXT_HTML)
     public String exploreData() throws IOException, URISyntaxException {
         return ExploreData.exploreData();
     }
-    
-    @GET @Path("mostPopularArea")
+
+    @GET
+    @Path("mostPopularArea")
     @Produces(MediaType.TEXT_HTML)
-    public String mostPopularArea () throws IOException, URISyntaxException {
+    public String mostPopularArea() throws IOException, URISyntaxException {
         // Return String
         // Return BufferedImage
         return MostPopularArea.getHtmlPage();
     }
-    
-    @GET @Path("mostPopularCompany")
+
+    @GET
+    @Path("mostPopularCompany")
     @Produces(MediaType.TEXT_HTML)
-    public String mostPopularCompany () throws IOException, URISyntaxException {
+    public String mostPopularCompany() throws IOException, URISyntaxException {
         // Return String
         // Return BufferedImage
         return MostPopularCompany.getHtmlPage();
     }
+
+    @GET
+    @Path("mostPopularTitle")
+    @Produces(MediaType.TEXT_HTML)
+    public String mostPopularTitle() throws IOException, URISyntaxException {
+        // Return String
+        // Return BufferedImage
+        return MostPopularTitle.getHtmlPage();
+    }
+
+    @GET
+    @Path("mostPopularSkill")
+    @Produces(MediaType.TEXT_HTML)
+    public String mostPopularSkill() throws IOException, URISyntaxException {
+        // Return String
+        // Return BufferedImage
+        return MostPopularSkill.getHtmlPage();
+    }
+
 }
