@@ -1,59 +1,63 @@
+/**
+ *
+ * @author Omar Safwat
+ */
 package group.webapp;
 
-import org.knowm.xchart.*;
-import org.knowm.xchart.style.Styler;
-import smile.data.DataFrame;
-
+import java.io.*;
+import java.net.URISyntaxException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.knowm.xchart.*;
+import org.knowm.xchart.VectorGraphicsEncoder.VectorGraphicsFormat;
+import org.knowm.xchart.style.*;
+import smile.data.DataFrame;
 
 public class MostPopularCompany {
-    public static void main(String[] args) {
-        JobsCSVDAO dao=new JobsCSVDAO();
-        String filePath = "src/main/resources/data/Wuzzuf_Jobs.csv";
+    public static String getHtmlPage() throws IOException, URISyntaxException {
+        JobsCSVDAO dao = new JobsCSVDAO();
+        // Get path of csv file from maven classpath
+        String filePath = MostPopularArea.class.getResource("/Wuzzuf_Jobs.csv").toString().replace("file:/", "");
+        
+        // Read file with DAO
         dao.readCSV(filePath);
         DataFrame jobs = dao.getAllJobs();
-        // Clean data
-        jobs = dao.cleanData(jobs);
-        // Create a Frequency map for each company
-        Map<String, Long> comFreqMap = jobs.stringVector("Company")
+
+        // Create a Frequency map for each location
+                Map<String, Long> comFreqMap = jobs.stringVector("Company")
                 .stream()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
         // Sort the Frequency Map and convert it to list of map entries
-        List<Map.Entry<String, Long>> comFreqList = comFreqMap.entrySet()
+            List<Map.Entry<String, Long>> comFreqList = comFreqMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.<String, Long>comparingByValue(Comparator.reverseOrder()))
                 .collect(Collectors.toList());
 
-        System.out.println("Most popular company is: " + comFreqList.get(0).getKey() + ", With a total number of occurance: " + comFreqList.get(0).getValue());
-        // Plotting the histogram of each company
-        graphCompanysFreqHistogram(comFreqMap);
-        // Plotting the pieChart of each company
-        graphCompanysFreqPie(comFreqMap);
+        // Plotting the histogram of each location
+        String imageAsStream = graphCompanysFreqPie(comFreqMap);
+        
+        // Store html file as string to edit it
+        String htmlPath = "/mostPopularCompany.html";
+        File htmlFile = new File(MostPopularCompany.class.getResource(htmlPath).toURI());
+        String htmlString = FileUtils.readFileToString(htmlFile);
+        
+        String textTag = "<p>Most popular company is: " + comFreqList.get(0).getKey() + ", With a total number of occurance: " + comFreqList.get(0).getValue() + "</p>";
+        
+        // Add results to html string
+        htmlString = htmlString.replace("$textTag", textTag);
+        htmlString = htmlString.replace("$companiesPieChart", imageAsStream);
+        
+        //Return as a string
+        return htmlString;
     }
-    public static void graphCompanysFreqHistogram(Map<String, Long> frequencyMap) {
-
-        // Filter Company with more than a 15 occurence
-        frequencyMap = frequencyMap.entrySet().stream().filter(e -> e.getValue() > 15).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
-
-        List<String> companys = frequencyMap.keySet().stream().collect(Collectors.toList());
-        List<Long> freq = frequencyMap.values().stream().collect(Collectors.toList());
-
-        // Create and customize chart
-        CategoryChart chart = new CategoryChartBuilder().width (1024).height (768).title ("Companys Histogram").xAxisTitle ("Company").yAxisTitle ("Frequency").build ();
-        chart.getStyler().setXAxisLabelRotation(45);
-        chart.getStyler ().setLegendPosition (Styler.LegendPosition.InsideNW);
-        chart.getStyler ().setHasAnnotations (true);
-        chart.getStyler ().setStacked (true);
-
-        chart.addSeries ("Company counts",companys, freq);
-        // Show it
-        new SwingWrapper(chart).displayChart ();
-    }
-    public static void graphCompanysFreqPie(Map<String, Long> comFreqMap){
+    
+    public static String graphCompanysFreqPie(Map<String, Long> comFreqMap) throws IOException{
         // Filter Company with more than a 15 occurence
         comFreqMap = comFreqMap.entrySet().stream().filter(e -> e.getValue() > 15).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
         // Create Chart
@@ -65,6 +69,23 @@ public class MostPopularCompany {
         for (Map.Entry<String, Long> entry : comFreqMap.entrySet()) {
             chart.addSeries(entry.getKey(), entry.getValue());
         }
-        new SwingWrapper (chart).displayChart ();
+        
+        // Save plot as SVG file in a temporary file and return its path
+        File tempFile = File.createTempFile("plot", ".svg");
+        VectorGraphicsEncoder.saveVectorGraphic(chart, tempFile.getAbsolutePath(), VectorGraphicsFormat.SVG);
+        String plotPath = tempFile.getAbsolutePath();
+        
+        String imageAsStream;
+        FileInputStream inputStream = new FileInputStream(plotPath);
+        try {
+            imageAsStream = IOUtils.toString(inputStream);
+        } finally {
+            inputStream.close();
+        }
+        
+        // Delete temporary file
+        tempFile.deleteOnExit();
+        
+        return imageAsStream;
     }
 }

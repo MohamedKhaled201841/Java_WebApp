@@ -1,2 +1,2 @@
-webapp/nb-configuration.xml
-webapp/target/
+/webapp/target/
+nb-configuration.xml
