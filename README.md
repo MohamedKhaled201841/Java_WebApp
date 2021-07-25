@@ -10,12 +10,12 @@ The WebApp was tested and run locally using Netbeans IDE, Java JDK-11 and deploy
 Below we present some of the results the WebApp provides to the user.
 ## Welcome Page
 
-<img src="images/welcome_page.jpg" width="500">
+<img src="https://github.com/Omar-Safwat/Java_WebApp/blob/main/images/data_summary.JPG" width="500">
 
 ## Print Data Summary
 
-<img src="images/data_summary.jpg" width="500">
+<img src="https://github.com/Omar-Safwat/Java_WebApp/blob/main/images/data_summary.JPG" width="500">
 
 ## Most Popular Titles in the dataset
 
-<img src="images/most_popular_titles.jpg" width="500">
+<img src="https://github.com/Omar-Safwat/Java_WebApp/blob/main/images/most_popular_titles.JPG" width="500">
