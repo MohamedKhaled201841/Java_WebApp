@@ -12,7 +12,7 @@ import smile.data.DataFrame;
 
 /**
  *
- * @author Omar Safwat
+ * @author Mostafa Mohamed Fathy
  */
 public class ExploreData {
 
