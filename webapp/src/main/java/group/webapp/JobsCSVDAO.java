@@ -7,8 +7,11 @@ package group.webapp;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.*;
+import java.util.stream.Collectors;
 import org.apache.commons.csv.CSVFormat;
 import smile.data.DataFrame;
+import smile.data.Tuple;
 import smile.data.measure.NominalScale;
 import smile.io.Read;
 
@@ -54,5 +57,30 @@ public class JobsCSVDAO implements JobsDAO<DataFrame> {
         String[] values = df.stringVector (featureName).distinct ().toArray (new String[]{});
         int[] encodedValues = df.stringVector (featureName).factorize (new NominalScale (values)).toIntArray ();
         return encodedValues;
+    }
+    
+    // Method returns DataFrame as a list of job objects
+    @Override
+    public List<Job> getJobsList() {
+        assert jobs != null;
+        List<Job> jobsList = new ArrayList<> ();
+        ListIterator<Tuple> iterator = jobs.stream ().collect (Collectors.toList ()).listIterator ();
+        while (iterator.hasNext ()) {
+            Tuple t = iterator.next ();
+            Job j = new Job();
+            // Set Job class attributes
+            j.setTitle((String)t.get("Title"));
+            j.setCompany((String)t.get("Company"));
+            j.setCountry((String)t.get("Country"));
+            j.setLocation(t.getAs("Location"));
+            j.setType(t.getAs("Type"));
+            j.setYearsExp(t.getAs("YearsExp"));
+            String[] skillsArray = t.get("Skills").toString().split(",");
+            j.setSkills(Arrays.asList(skillsArray));
+ 
+            // Append new job object to List
+            jobsList.add (j);
+        }
+        return jobsList;
     }
 }

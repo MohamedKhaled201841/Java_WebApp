@@ -16,6 +16,10 @@ class Job {
     String country;
     List<String> skills;
 
+    public Job() {
+        
+    }
+        
     public Job(String title, String Company, String location, String type, String yearsExp, String country, List<String> skills) {
         this.title = title;
         this.Company = Company;
