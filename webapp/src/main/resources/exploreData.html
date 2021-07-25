@@ -9,10 +9,46 @@ and open the template in the editor.
         <title>Summary</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     </head>
     <body>
-        <div>
-            $textTag
+        <div class="container">
+            <h1 class="display-3">Data Summary</h1>
+            <br>
+
+            <table class="table">
+                <thead class="thead-dark rounded">
+                    <tr>
+                        <th scope="col">Columns Names</th>
+                        <th scope="col">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    $tablebody
+                </tbody>
+            </table>
+            <div class="alert alert-dark" role="alert">
+                $textTag
+            </div>
+
+            <table class="table table-striped">
+
+                <thead class="thead-dark rounded">
+                    <tr>
+                        <th scope="col">Title</th>
+                        <th scope="col">Company</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">YearsExp</th>
+                        <th scope="col">Country</th>
+                        <th scope="col">Skills</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    $rows
+                </tbody>
+            </table>
         </div>
     </body>
 </html>
