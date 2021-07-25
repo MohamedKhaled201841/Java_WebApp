@@ -6,7 +6,7 @@ import java.util.List;
  * Data Access Object interface for wuzzuf.com Jobs
  * 
  * @author Omar Safwat
- */
+ */ 
 public interface JobsDAO<T> {
     
     // Implementation should include a private attribute, manipulated by the methods below
@@ -19,4 +19,7 @@ public interface JobsDAO<T> {
     
     // Method returns feature as int array with encoded values
     public int[] encodeFeature(T data, String featureName);
+    
+    // Method returns DataFrame as a list of job objects
+    public List<Job> getJobsList();
 }
