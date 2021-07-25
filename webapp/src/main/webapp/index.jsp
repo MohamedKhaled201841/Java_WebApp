@@ -16,7 +16,7 @@
             <div class=" m-5">
                 <ul class="list-group mt ">
                     <li class="list-group-item active"><h2>Jersey RESTful Web Application!</h2></li>
-                    <li class="list-group-item"><a href="webapi/myresource/summary">Print Data Summary</a></li>
+                    <li class="list-group-item"><a href="webapi/myresource/summary">Data Summary</a></li>
                     <li class="list-group-item"><a href="webapi/myresource/mostPopularArea">Most Popular Area</a></li>
                     <li class="list-group-item"><a href="webapi/myresource/mostPopularCompany">Most Popular Company</a></li>
                     <li class="list-group-item"><p><a href="webapi/myresource/mostPopularTitle">Most Popular Title</a></li>
